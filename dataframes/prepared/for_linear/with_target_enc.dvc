@@ -1,6 +1,0 @@
-outs:
-- md5: a2f5fe282a506a03e3312f659371d1c2.dir
-  size: 327997688
-  nfiles: 4
-  hash: md5
-  path: with_target_enc
