@@ -1,0 +1,6 @@
+outs:
+- md5: 826bd29413fa6ccb6237f489efa7d0e8.dir
+  size: 227702039
+  nfiles: 2
+  hash: md5
+  path: without_target_enc
