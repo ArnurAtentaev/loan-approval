@@ -1,0 +1,5 @@
+[core]
+    remote = dvc_data
+['remote "dvc_data"']
+    url = s3://mlflow-experiments/dvc
+    endpointurl = http://localhost:9000
