@@ -86,6 +86,15 @@ services:
     networks:
       - mlflow_experiments
     restart: always
+  
+  prometheus:
+    container_name: prometheus
+    image:
+    ports:
+      - "${PROMETHEUS_PORT_EXPOSE}:${PROMETHEUS_PORT_SERVICE}"
+    volumes:
+      - prometheus_valume/
+    restart: always
 
 networks:
   mlflow_experiments:
@@ -95,3 +104,4 @@ volumes:
   mlflow_volume:
   pg_mlflow_db:
   minio3_storage:
+  prometheus_valume:

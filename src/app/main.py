@@ -10,7 +10,6 @@ import pandas as pd
 
 from src.utils.s3 import s3_connector, load_from_s3
 from src.schemas.model_parameters import UserInfo
-from src.utils.data_processor import DataPreprocessor
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv(".env")
