@@ -93,8 +93,13 @@ services:
     ports:
       - "${PROMETHEUS_PORT_EXPOSE}:${PROMETHEUS_PORT_SERVICE}"
     volumes:
-      - prometheus_valume/
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "${GRAFANA_PORT_EXPOSE}:${GRAFANA_PORT_SERVICE}"
 
 networks:
   mlflow_experiments:
@@ -104,4 +109,3 @@ volumes:
   mlflow_volume:
   pg_mlflow_db:
   minio3_storage:
-  prometheus_valume:
