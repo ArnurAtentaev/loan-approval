@@ -1,5 +1,7 @@
 .venv
-dataframe
+dataframes
 .md
 .lock
 .gitignore
+.dvc
+.dvcignore
