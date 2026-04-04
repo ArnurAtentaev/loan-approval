@@ -1,21 +1,12 @@
-import os
-from load_dotenv import load_dotenv
-
-import joblib
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from xgboost import XGBClassifier
 
-from src.utils.data_processor import DataPreprocessor
-from src.utils.s3 import s3_connector, save_object
-
-load_dotenv(".env")
-
-MINIO3_PORT = os.getenv("S3_PORT_EXPOSE")
-MINIO3_ACCESS_KEY_ID = os.getenv("MINIO_ROOT_USER")
-MINIO3_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
+from app.utils.s3 import save_object, upload_to_s3
+from app.config import settings
+from app.utils.data_processor import DataPreprocessor
 
 
 df = pd.read_csv("dataframes/raw_data/loan_approval_data.csv")
@@ -61,11 +52,17 @@ model = XGBClassifier(
 )
 model = model.fit(X_train_res, y_train_res)
 
-client = s3_connector(
-    client_name="s3",
-    port=MINIO3_PORT,
-    access_key_id=MINIO3_ACCESS_KEY_ID,
-    secret_access_key=MINIO3_SECRET_ACCESS_KEY,
-)
-save_object(client, preprocessor, "inference-bucket", "preprocessor.pkl")
-save_object(client, model, "inference-bucket", "model.pkl")
+
+if __name__ == "__main__":
+    save_object(
+        s3_client=settings.s3.connection,
+        obj=preprocessor,
+        bucket="inference-bucket",
+        key="preprocessor.pkl",
+    )
+    save_object(
+        s3_client=settings.s3.connection,
+        obj=model,
+        bucket="inference-bucket",
+        key="model.pkl",
+    )

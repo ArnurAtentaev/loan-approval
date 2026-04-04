@@ -393,38 +393,50 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "boto3" },
+    { name = "dotenv" },
+    { name = "fastapi" },
+    { name = "imblearn" },
+    { name = "load-dotenv" },
+    { name = "prometheus-client" },
+    { name = "update" },
+    { name = "uvicorn" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "catboost" },
     { name = "category-encoders" },
-    { name = "dotenv" },
     { name = "dvc-s3" },
-    { name = "imblearn" },
     { name = "lightgbm" },
-    { name = "load-dotenv" },
     { name = "mlflow" },
     { name = "notebook" },
     { name = "optuna" },
-    { name = "prometheus-client" },
     { name = "seaborn" },
-    { name = "update" },
     { name = "xgboost" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "boto3", specifier = ">=1.42.70" },
+    { name = "dotenv", specifier = ">=0.9.9" },
+    { name = "fastapi", specifier = ">=0.135.2" },
+    { name = "imblearn", specifier = ">=0.0" },
+    { name = "load-dotenv", specifier = ">=0.1.0" },
+    { name = "prometheus-client", specifier = ">=0.24.1" },
+    { name = "update", specifier = ">=0.0.1" },
+    { name = "uvicorn", specifier = ">=0.42.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
     { name = "catboost", specifier = ">=1.2.10" },
     { name = "category-encoders", specifier = ">=2.9.0" },
-    { name = "dotenv", specifier = ">=0.9.9" },
     { name = "dvc-s3", specifier = ">=3.3.0" },
-    { name = "imblearn", specifier = ">=0.0" },
     { name = "lightgbm", specifier = ">=4.6.0" },
-    { name = "load-dotenv", specifier = ">=0.1.0" },
     { name = "mlflow", specifier = ">=3.10.1" },
     { name = "notebook", specifier = ">=7.5.5" },
     { name = "optuna", specifier = ">=4.8.0" },
-    { name = "prometheus-client", specifier = ">=0.24.1" },
     { name = "seaborn", specifier = ">=0.13.2" },
-    { name = "update", specifier = ">=0.0.1" },
     { name = "xgboost", specifier = ">=3.2.0" },
 ]
 

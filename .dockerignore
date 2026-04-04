@@ -1,7 +1,11 @@
 .venv
 dataframes
+notebooks
+mlflow_cont
+prometheus
 .md
 .lock
 .gitignore
 .dvc
 .dvcignore
+.env
