@@ -10,14 +10,12 @@ from prometheus_client import start_http_server, Summary, Counter
 
 import pandas as pd
 
-from src.utils.s3 import s3_connector, load_from_s3
-from src.schemas.model_parameters import UserInfo
+from app.config import settings
+from app.utils.s3 import load_from_s3
+from app.schemas.model_parameters import UserInfo
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv(".env")
-MINIO3_PORT = os.getenv("S3_PORT_EXPOSE")
-MINIO3_ACCESS_KEY_ID = os.getenv("MINIO_ROOT_USER")
-MINIO3_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
 
 PROMETHEUS_PORT_EXPOSE = os.getenv("PROMETHEUS_PORT_EXPOSE")
 
@@ -32,16 +30,17 @@ CLASS_ALLOCATION = Counter(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    s3_conn = s3_connector(
-        client_name="s3",
-        port=MINIO3_PORT,
-        access_key_id=MINIO3_ACCESS_KEY_ID,
-        secret_access_key=MINIO3_SECRET_ACCESS_KEY,
-    )
+    s3_client = settings.s3.connection
+    app.state.s3_client = s3_client
+
     app.state.preprocessor = load_from_s3(
-        s3_conn, bucket="inference-bucket", key="preprocessor.pkl"
+        s3_client,
+        bucket="inference-bucket",
+        key="preprocessor.pkl",
     )
-    app.state.model = load_from_s3(s3_conn, bucket="inference-bucket", key="model.pkl")
+    app.state.model = load_from_s3(
+        s3_client, bucket="inference-bucket", key="model.pkl"
+    )
 
     start_http_server(PROMETHEUS_PORT_EXPOSE)
     yield
@@ -71,4 +70,9 @@ def predict_loan_approval(request: Request, client_info: UserInfo):
 
 
 if __name__ == "__main__":
-    uvicorn.run("src.app.main:app", reload=True)
+    uvicorn.run(
+        "app.main:app",
+        host=settings.loan.host,
+        port=int(settings.s3.port_service),
+        reload=True,
+    )
