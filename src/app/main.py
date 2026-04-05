@@ -1,42 +1,42 @@
-import os
 import logging
+import pandas as pd
 from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
 
-from prometheus_client import Summary, Counter
+import boto3
 
-import pandas as pd
+# rom botocore.client import Config
+from prometheus_client import start_http_server
 
 from app.config import settings
 from app.utils.s3 import load_from_s3
 from app.schemas.model_parameters import UserInfo
+from app.metrics.loan_approval import REQUEST_TIME, TOTAL_REQUEST, CLASS_ALLOCATION
 
 logging.basicConfig(level=logging.INFO)
-
-REQUEST_TIME = Summary("request_processing_seconds", "Time spent processing request")
-TOTAL_REQUEST = Counter("predictions_total", "Total number of predictions made")
-CLASS_ALLOCATION = Counter(
-    "class_distribution",
-    "How often model selects class",
-    ["predicted_class"],
-)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    s3_client = settings.s3.connection
-    app.state.s3_client = s3_client
+    app.state.s3_client = boto3.client(
+        "s3",
+        endpoint_url=f"http://{settings.s3.host}:{settings.s3.port_service}",
+        aws_access_key_id=settings.s3.root_user,
+        aws_secret_access_key=settings.s3.root_password,
+    )
 
     app.state.preprocessor = load_from_s3(
-        s3_client,
+        app.state.s3_client,
         bucket="inference-bucket",
         key="preprocessor.pkl",
     )
     app.state.model = load_from_s3(
-        s3_client, bucket="inference-bucket", key="model.pkl"
+        app.state.s3_client, bucket="inference-bucket", key="model.pkl"
     )
+
+    app.state.prometheus = start_http_server(port=settings.prometheus.port_service)
 
     yield
 
@@ -52,7 +52,7 @@ def predict_loan_approval(request: Request, client_info: UserInfo):
 
             processed_data = request.app.state.preprocessor.transform(client_data)
             prediction = request.app.state.model.predict(processed_data)
-            probs = request.app.state.model.predict.predict_proba(processed_data)[0]
+            probs = request.app.state.model.predict_proba(processed_data)[0]
 
             predicted_class = 1 if probs[1] > 0.5 else 0
             CLASS_ALLOCATION.labels(predicted_class=str(predicted_class)).inc()
@@ -68,6 +68,5 @@ if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
         host=settings.loan.host,
-        port=int(settings.s3.port_service),
-        reload=True,
+        port=int(settings.loan.port_service),
     )

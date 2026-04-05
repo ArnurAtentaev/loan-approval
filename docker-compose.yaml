@@ -4,6 +4,7 @@ services:
     container_name: loan_app
     ports:
       - "${LOAN__PORT_EXPOSE}:${LOAN__PORT_SERVICE}"
+      - "${LOAN__PROMETHEUS_PORT_EXPOSE}:${LOAN__PROMETHEUS_PORT_SERVICE}"
     depends_on:
       - minio3
     env_file:
