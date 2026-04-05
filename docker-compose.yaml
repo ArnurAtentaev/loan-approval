@@ -118,11 +118,22 @@ services:
     container_name: prometheus
     image: prom/prometheus:latest
     ports:
-      - ${PROMETHEUS__PORT_EXPOSE}:${PROMETHEUS__PORT_SERVICE}
+      - "${PROMETHEUS__PORT_EXPOSE}:${PROMETHEUS__PORT_SERVICE}"
     env_file:
       - ./.env
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app
+    restart: always
+  
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "${GRAFANA_PORT_EXPOSE}:${GRAFANA_PORT_SERVICE}"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     networks:
       - app
     restart: always
