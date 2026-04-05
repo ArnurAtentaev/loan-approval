@@ -112,6 +112,19 @@ services:
     networks:
       - mlflow_experiments
     restart: always
+  
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+      - ${PROMETHEUS__PORT_EXPOSE}:${PROMETHEUS__PORT_SERVICE}
+    env_file:
+      - ./.env
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app
+    restart: always
 
 networks:
   mlflow_experiments:

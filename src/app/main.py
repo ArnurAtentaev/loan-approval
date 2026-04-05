@@ -1,12 +1,11 @@
 import os
 import logging
-from load_dotenv import load_dotenv
 from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
 
-from prometheus_client import start_http_server, Summary, Counter
+from prometheus_client import Summary, Counter
 
 import pandas as pd
 
@@ -15,9 +14,6 @@ from app.utils.s3 import load_from_s3
 from app.schemas.model_parameters import UserInfo
 
 logging.basicConfig(level=logging.INFO)
-load_dotenv(".env")
-
-PROMETHEUS_PORT_EXPOSE = os.getenv("PROMETHEUS_PORT_EXPOSE")
 
 REQUEST_TIME = Summary("request_processing_seconds", "Time spent processing request")
 TOTAL_REQUEST = Counter("predictions_total", "Total number of predictions made")
@@ -42,7 +38,6 @@ async def lifespan(app: FastAPI):
         s3_client, bucket="inference-bucket", key="model.pkl"
     )
 
-    start_http_server(PROMETHEUS_PORT_EXPOSE)
     yield
 
 

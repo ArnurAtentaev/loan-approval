@@ -7,6 +7,7 @@ from pydantic_settings import (
 
 from app.config.s3_config import S3StorageConfig
 from app.config.loan_app_config import LoanConfig
+from app.config.prometheus_config import PrometheusConfig
 
 
 class Settings(BaseSettings):
@@ -16,6 +17,7 @@ class Settings(BaseSettings):
 
     s3: S3StorageConfig
     loan: LoanConfig
+    prometheus: PrometheusConfig
 
     @classmethod
     def settings_customise_sources(
