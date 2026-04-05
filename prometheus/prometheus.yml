@@ -6,3 +6,5 @@ scrape_configs:
       - targets: ['loan-app:8000']
         labels:
             service: loan_app
+rule_files:
+  - "alerts.yml"

@@ -1,0 +1,45 @@
+groups:
+  - name: loan-app-allerts
+    rules:
+      - alert: HighRequestLatency
+        expr: rate(request_processing_seconds_sum[1m]) 
+                / rate(request_processing_seconds_count[1m]) > 1
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency"
+          description: "Avg time request > 1 sec"
+
+      - alert: HighRequestLatency
+        expr: rate(predictions_total[1m]) * 60 > 100
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request rate"
+          description: "More than 100 requests per minute"
+      
+      - alert: ModelBiasClass0
+        expr: |
+          sum(rate(class_distribution{predicted_class="0"}[5m]))
+          /
+          sum(rate(class_distribution[5m])) < 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Model bias detected for class 0"
+          description: "Class 0 predictions less than 10%"
+
+      - alert: ModelBiasClass1
+        expr: |
+          sum(rate(class_distribution{predicted_class="1"}[5m]))
+          /
+          sum(rate(class_distribution[5m])) < 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Model bias detected for class 1"
+          description: "Class 1 predictions less than 10%"
