@@ -10,15 +10,19 @@ dependencies = [
     "fastapi>=0.135.2",
     "imblearn>=0.0",
     "load-dotenv>=0.1.0",
+    "pandas==2.3.3",
     "prometheus-client>=0.24.1",
+    "pydantic-settings>=2.13.1",
+    "category-encoders>=2.9.0",
     "update>=0.0.1",
+    "xgboost>=3.2.0",
     "uvicorn>=0.42.0",
+    "scikit-learn>=1.8.0",
 ]
 
 [dependency-groups]
 dev = [
     "catboost>=1.2.10",
-    "category-encoders>=2.9.0",
     "dvc-s3>=3.3.0",
     "lightgbm>=4.6.0",
     "mlflow>=3.10.1",
