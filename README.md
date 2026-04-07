@@ -68,17 +68,36 @@ This way, DataPreprocessor can be easily integrated into API or other ML-PIPs to
 <h3>Final set of traits</h3>
 ```python
 [
- 'Applicant_Income', 'Coapplicant_Income', 'Employment_Status', 'Age',
- 'Dependents', 'Credit_Score', 'Existing_Loans', 'DTI_Ratio', 'Savings',
- 'Collateral_Value', 'Loan_Amount', 'Loan_Term', 'Property_Area',
- 'total_income', 'approximate_loan_amount', 'payment_capacity',
- 'collateral_ratio', 'income_to_loan', 'risk_score',
- 'Marital_Status_Married', 'Marital_Status_Single',
- 'Education_Level_Graduate', 'Education_Level_Not Graduate',
- 'Gender_Female', 'Gender_Male',
- 'Loan_Purpose_Business', 'Loan_Purpose_Car',
- 'Loan_Purpose_Education', 'Loan_Purpose_Home',
- 'Loan_Purpose_Personal'
+    'Applicant_Income',
+    'Coapplicant_Income',
+    'Employment_Status',
+    'Age',
+    'Dependents',
+    'Credit_Score',
+    'Existing_Loans',
+    'DTI_Ratio',
+    'Savings',
+    'Collateral_Value',
+    'Loan_Amount',
+    'Loan_Term',
+    'Property_Area',
+    'total_income',
+    'approximate_loan_amount',
+    'payment_capacity',
+    'collateral_ratio',
+    'income_to_loan',
+    'risk_score',
+    'Marital_Status_Married',
+    'Marital_Status_Single',
+    'Education_Level_Graduate',
+    'Education_Level_Not Graduate',
+    'Gender_Female',
+    'Gender_Male',
+    'Loan_Purpose_Business',
+    'Loan_Purpose_Car',
+    'Loan_Purpose_Education',
+    'Loan_Purpose_Home',
+    'Loan_Purpose_Personal'
 ]
 ```
 <p>
@@ -98,16 +117,16 @@ Also to correct the imbalance of classes, I used SMOTE, which was able to raise 
 <h3>Model scores:</h3>
 
 ><p><b>PR-AUC</b></p>
-><img src="./git/images/smote_pr_auc.PNG" width="500">
+><img src="./git/images/smote_pr_auc.PNG" width="250">
 
 ><p><b>Secondary metrics</b></p>
-><img src="./git/images/smote_metrics.PNG" width="500">
+><img src="./git/images/smote_metrics.PNG" width="250">
 
 ><p><b>PR-AUC for stratified cross vallidation</b></p>
-><img src="./git/images/pr_auc_cv.PNG" width="500">
+><img src="./git/images/pr_auc_cv.PNG" width="250">
 
 ><p><b>Secondary metrics for stratified cross vallidation</b></p>
-><img src="./git/images/cv_metrics.PNG" width="500">
+><img src="./git/images/cv_metrics.PNG" width="250">
 
 <h2>API</h2>
 <p>Model wrapped in FastAPI service:</p>
@@ -127,8 +146,8 @@ POST /loan_approval
 <p>Prometheus</p>
 <ul>
 <li>Request Processing Time (REQUEST_TIME)</li>
-<li>>Total requests (TOTAL_REQUEST)</li>
-<li>>Class allocation (CLASS_ALLOCATION)</li>
+<li>Total requests (TOTAL_REQUEST)</li>
+<li>Class allocation (CLASS_ALLOCATION)</li>
 </ul>
 <p>Grafana</p>
 <ul>
@@ -140,12 +159,14 @@ POST /loan_approval
 >MLflow - experiment logic, model storage and metrics
 >DVC - Manage data and model versions
 >S3 (MinIO) - storage:
-    Models
-    Preprocessors
-    The artifacts of experiments
+<ul>
+<li>Models</li>
+<li>Preprocessors</li>
+<li>The artifacts of experiments</li>
+</ul>
 
 <h2>Docker and Infrastructure</h2>
-<p>Project fully containerized:</p>
+<p>Project fully containerized.</p>
 <h3>Services:</h3>
 <ul>
 <li>app - API with model</li>
@@ -159,13 +180,13 @@ POST /loan_approval
 
 <h2>S3 Auto Setup</h2>
 <p>When minio3_setup is run:</p>
-<p>
-Create:
-mlflow
-mlflow/artifacts
-inference bucket
-If already there are chips, they are not re-created
-</p>
+<h4>Create:</h4>
+<ul>
+<li>mlflow</li>
+<li>mlflow/artifacts</li>
+<li>inference bucket</li>
+</ul>
+<p>If already there are chips, they are not re-created</p>
 
 <h2>Future Enhancements</h2>
 <p>
