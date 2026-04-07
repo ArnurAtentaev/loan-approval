@@ -9,25 +9,39 @@ The system takes customer data, processes it through a calendar preprocessing an
 </ul>
 </p>
 
+<h2>Project Stack:</h2>
+<ul>
+<li>ML models: Scikit-learn, CatBoost, LightGBM, XGBoost</li>
+<li>API/Backend: FastAPI, Pydantic</li>
+<li>EDA: Pandas, Numpy, Scipy, Category-encoders</li>
+<li>S3(boto3, botocore)</li>
+<li>Vizualizers: matplotlib, seaborn</li>
+<li>Monitoring: prometheus_client, grafana</li>
+<li>Experiments: Optuna, MLflow, DVC</li>
+</ul>
+
 <h2>Source characteristics:</h2>
-```
-Applicant_Income: float
-Coapplicant_Income: float
-Employment_Status: ["Salaried", "Contract", "Unemployed", "Self-employed"]
-Age: float
-Marital_Status: ["Married", "Single"]
-Dependents: int
-Credit_Score: float
-Existing_Loans: int
-DTI_Ratio: float
-Savings: float
-Collateral_Value: float
-Loan_Amount: float
-Loan_Term: float
-Loan_Purpose: ["Car", "Home", "Personal", "Education", "Business"]
-Property_Area: ["Rural", "Urban", "Semiurban"]
-Education_Level: ["Not Graduate", "Graduate"]
-Gender: ["Male", "Female"]
+
+```[
+   [
+    Applicant_Income: float
+    Coapplicant_Income: float
+    Employment_Status: ["Salaried", "Contract", "Unemployed", "Self-employed"]
+    Age: float
+    Marital_Status: ["Married", "Single"]
+    Dependents: int
+    Credit_Score: float
+    Existing_Loans: int
+    DTI_Ratio: float
+    Savings: float
+    Collateral_Value: float
+    Loan_Amount: float
+    Loan_Term: float
+    Loan_Purpose: ["Car", "Home", "Personal", "Education", "Business"]
+    Property_Area: ["Rural", "Urban", "Semiurban"]
+    Education_Level: ["Not Graduate", "Graduate"]
+    Gender: ["Male", "Female"]
+    ]
 ```
 
 <h2>Feature Engineering</h2>
