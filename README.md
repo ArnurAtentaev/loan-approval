@@ -70,7 +70,7 @@ This way, DataPreprocessor can be easily integrated into API or other ML-PIPs to
 </ul>
 <h3>Final set of traits</h3>
 
->[
+```[
     'Applicant_Income', 
     'Coapplicant_Income', 
     'Employment_Status', 
@@ -102,6 +102,8 @@ This way, DataPreprocessor can be easily integrated into API or other ML-PIPs to
     'Loan_Purpose_Home', 
     'Loan_Purpose_Personal' 
     ]
+```
+
 <p>
 Also to correct the imbalance of classes, I used SMOTE, which was able to raise the value of the metric complex by 3-5 percent.
 </p>
