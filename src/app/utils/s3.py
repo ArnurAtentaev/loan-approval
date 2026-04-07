@@ -6,6 +6,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
+class S3Storage:
+    pass
+
+
 def load_from_s3(client, bucket: str, key):
     try:
         response = client.get_object(Bucket=bucket, Key=key)
