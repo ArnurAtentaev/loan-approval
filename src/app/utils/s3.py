@@ -1,5 +1,6 @@
 import io
-from boto3.exceptions import Boto3Error, S3UploadFailedError, S3TransferFailedError
+from botocore.exceptions import ClientError, BotoCoreError
+from boto3.exceptions import S3UploadFailedError
 import joblib
 import logging
 
@@ -7,37 +8,36 @@ logging.basicConfig(level=logging.INFO)
 
 
 class S3Storage:
-    pass
+    def __init__(self, client, bucket):
+        self.client = client
+        self.bucket = bucket
 
+    def load_from_s3(self, key):
+        try:
+            response = self.client.get_object(Bucket=self.bucket, Key=key)
+            buffer = io.BytesIO(response["Body"].read())
+            buffer.seek(0)
 
-def load_from_s3(client, bucket: str, key):
-    try:
-        response = client.get_object(Bucket=bucket, Key=key)
-        buffer = io.BytesIO(response["Body"].read())
-        buffer.seek(0)
+            obj = joblib.load(buffer)
+            return obj
+        except ClientError as e:
+            error = e.response["Error"]["Code"]
+            if error == "NoSuchBucket":
+                raise RuntimeError(
+                    f"Bucket {self.bucket} does not exist. Check config."
+                ) from e
+            elif error == "NoSuchKey":
+                raise RuntimeError(f"Object with key '{key}' not found in bucket.")
+            else:
+                raise
 
-        obj = joblib.load(buffer)
-        return obj
-    except Boto3Error as b3:
-        logging.exception(b3)
+    def save_object(self, key, obj):
+        try:
+            buffer = io.BytesIO()
+            joblib.dump(obj, buffer)
+            buffer.seek(0)
 
-
-def upload_to_s3(s3_client, bucket_name: str, file_obj, key: str):
-    if not s3_client.head_bucket(Bucket=bucket_name):
-        s3_client.create_bucket(Bucket=bucket_name)
-
-    try:
-        s3_client.put_object(Bucket=bucket_name, Key=key, Body=file_obj)
-    except S3UploadFailedError as u:
-        logging.exception(u)
-
-
-def save_object(s3_client, obj, bucket, key):
-    try:
-        buffer = io.BytesIO()
-        joblib.dump(obj, buffer)
-        buffer.seek(0)
-
-        upload_to_s3(s3_client, bucket, buffer, key)
-    except S3TransferFailedError as s:
-        logging.exception(s)
+            self.client.put_object(Bucket=self.bucket, Key=key, Body=buffer)
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchBucket":
+                raise RuntimeError(f"Bucket {self.bucket} does not exist. Check config")
