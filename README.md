@@ -66,7 +66,7 @@ This way, DataPreprocessor can be easily integrated into API or other ML-PIPs to
 ```Employment_Status```
 </ul>
 <h3>Final set of traits</h3>
-```
+```python
 [
  'Applicant_Income', 'Coapplicant_Income', 'Employment_Status', 'Age',
  'Dependents', 'Credit_Score', 'Existing_Loans', 'DTI_Ratio', 'Savings',
@@ -93,3 +93,100 @@ Also to correct the imbalance of classes, I used SMOTE, which was able to raise 
 <li>Gradient Boosting</li>
 </ul>
 <p>The best score was in the gradient busting model - XGBClassifier</p>
+<p>For the main metric was selected: PR-AUC</p>
+
+<h3>Model scores:</h3>
+
+><p><b>PR-AUC</b></p>
+><img src="./git/images/smote_pr_auc.PNG" width="500">
+
+><p><b>Secondary metrics</b></p>
+><img src="./git/images/smote_metrics.PNG" width="500">
+
+><p><b>PR-AUC for stratified cross vallidation</b></p>
+><img src="./git/images/pr_auc_cv.PNG" width="500">
+
+><p><b>Secondary metrics for stratified cross vallidation</b></p>
+><img src="./git/images/cv_metrics.PNG" width="500">
+
+<h2>API</h2>
+<p>Model wrapped in FastAPI service:</p>
+<p>Endpoint:</p>
+```python
+POST /loan_approval
+```
+<p>Пример ответа</p>
+```python
+{
+  "response": "Approved"
+}
+```
+
+<h2>Monitoring</h2>
+<h3>Implemented through:</h3>
+<p>Prometheus</p>
+<ul>
+<li>Request Processing Time (REQUEST_TIME)</li>
+<li>>Total requests (TOTAL_REQUEST)</li>
+<li>>Class allocation (CLASS_ALLOCATION)</li>
+</ul>
+<p>Grafana</p>
+<ul>
+<li>Visualize your metric in real time</li>
+</ul>
+
+<h2>ML Lifecycle</h2>
+
+>MLflow - experiment logic, model storage and metrics
+>DVC - Manage data and model versions
+>S3 (MinIO) - storage:
+    Models
+    Preprocessors
+    The artifacts of experiments
+
+<h2>Docker and Infrastructure</h2>
+<p>Project fully containerized:</p>
+<h3>Services:</h3>
+<ul>
+<li>app - API with model</li>
+<li>mlflow - experiment tracking</li>
+<li>pg_db_mlflow - MLflow database</li>
+<li>minio3 - S3 Storage</li>
+<li>minio3_setup - Car-Build Boxes</li>
+<li>prometheus - collection of metrics</li>
+<li>grafana - visualization</li>
+</ul>
+
+<h2>S3 Auto Setup</h2>
+<p>When minio3_setup is run:</p>
+<p>
+Create:
+mlflow
+mlflow/artifacts
+inference bucket
+If already there are chips, they are not re-created
+</p>
+
+<h2>Future Enhancements</h2>
+<p>
+In the future, the project can be expanded to fully automate online approval when applying for a loan. Possible improvements:
+</p>
+
+Automatically retrieve customer history:
+<ul>
+<li>Current and past loans</li>
+<li>Debt and overdue information</li>
+<li>Average monthly income and official salary</li>
+<li>history of payments on other financial obligations</li>
+</ul>
+
+Automatic customer pre-scoring:
+<ul>
+<li>Credit rating calculation</li>
+<li>Assessment of solvency</li>
+<li>prediction of default risk</li>
+</ul>
+
+<p>
+These improvements will reduce manual labor, speed decision-making, and improve risk assessment accuracy, ensuring quick and safe credit disbursement.
+</p>
