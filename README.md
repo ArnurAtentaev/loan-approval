@@ -59,46 +59,49 @@ This way, DataPreprocessor can be easily integrated into API or other ML-PIPs to
 <h3>Character encoding</h3>
 <ul>
 <li>One-Hot Encoding:</li>
-```["Marital_Status", "Education_Level", "Gender", "Loan_Purpose"]```
+
+>["Marital_Status", "Education_Level", "Gender", "Loan_Purpose"]
 <li>Ordinal Encoding:</li>
-```Property_Area: ["Rural", "Semiurban", "Urban"]```
+
+>Property_Area: ["Rural", "Semiurban", "Urban"]
 <li>Target Encoding:</li>
-```Employment_Status```
+
+>Employment_Status
 </ul>
 <h3>Final set of traits</h3>
 
 >[
-    'Applicant_Income',
-    'Coapplicant_Income',
-    'Employment_Status',
-    'Age',
-    'Dependents',
-    'Credit_Score',
-    'Existing_Loans',
-    'DTI_Ratio',
-    'Savings',
-    'Collateral_Value',
-    'Loan_Amount',
-    'Loan_Term',
-    'Property_Area',
-    'total_income',
-    'approximate_loan_amount',
-    'payment_capacity',
-    'collateral_ratio',
-    'income_to_loan',
-    'risk_score',
-    'Marital_Status_Married',
-    'Marital_Status_Single',
-    'Education_Level_Graduate',
-    'Education_Level_Not Graduate',
-    'Gender_Female',
-    'Gender_Male',
-    'Loan_Purpose_Business',
-    'Loan_Purpose_Car',
-    'Loan_Purpose_Education',
-    'Loan_Purpose_Home',
-    'Loan_Purpose_Personal'
-
+    'Applicant_Income', 
+    'Coapplicant_Income', 
+    'Employment_Status', 
+    'Age', 
+    'Dependents', 
+    'Credit_Score', 
+    'Existing_Loans', 
+    'DTI_Ratio', 
+    'Savings', 
+    'Collateral_Value', 
+    'Loan_Amount', 
+    'Loan_Term', 
+    'Property_Area', 
+    'total_income', 
+    'approximate_loan_amount', 
+    'payment_capacity', 
+    'collateral_ratio', 
+    'income_to_loan', 
+    'risk_score', 
+    'Marital_Status_Married', 
+    'Marital_Status_Single', 
+    'Education_Level_Graduate', 
+    'Education_Level_Not Graduate', 
+    'Gender_Female', 
+    'Gender_Male', 
+    'Loan_Purpose_Business', 
+    'Loan_Purpose_Car', 
+    'Loan_Purpose_Education', 
+    'Loan_Purpose_Home', 
+    'Loan_Purpose_Personal' 
+    ]
 <p>
 Also to correct the imbalance of classes, I used SMOTE, which was able to raise the value of the metric complex by 3-5 percent.
 </p>
@@ -130,11 +133,13 @@ Also to correct the imbalance of classes, I used SMOTE, which was able to raise 
 <h2>API</h2>
 <p>Model wrapped in FastAPI service:</p>
 <p>Endpoint:</p>
+
 ```python
 POST /loan_approval
 ```
 <p>Пример ответа</p>
-```python
+
+```
 {
   "response": "Approved"
 }
