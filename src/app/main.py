@@ -7,11 +7,10 @@ from fastapi import FastAPI, Request
 
 import boto3
 
-# rom botocore.client import Config
 from prometheus_client import start_http_server
 
 from app.config import settings
-from app.utils.s3 import load_from_s3
+from app.utils.s3 import S3Storage
 from app.schemas.model_parameters import UserInfo
 from app.metrics.loan_approval import REQUEST_TIME, TOTAL_REQUEST, CLASS_ALLOCATION
 
@@ -27,14 +26,11 @@ async def lifespan(app: FastAPI):
         aws_secret_access_key=settings.s3.root_password,
     )
 
-    app.state.preprocessor = load_from_s3(
-        app.state.s3_client,
-        bucket="inference-bucket",
+    s3_torage = S3Storage(app.state.s3_client, bucket="inference-bucket")
+    app.state.preprocessor = s3_torage.load_from_s3(
         key="preprocessor.pkl",
     )
-    app.state.model = load_from_s3(
-        app.state.s3_client, bucket="inference-bucket", key="model.pkl"
-    )
+    app.state.model = s3_torage.load_from_s3(key="model.pkl")
 
     app.state.prometheus = start_http_server(port=settings.prometheus.port_service)
 

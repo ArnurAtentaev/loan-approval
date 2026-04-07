@@ -1,18 +1,19 @@
 import io
-from botocore.exceptions import ClientError, BotoCoreError
-from boto3.exceptions import S3UploadFailedError
-import joblib
 import logging
+
+import joblib
+from botocore.exceptions import ClientError, BotoCoreError
+from botocore.client import BaseClient
 
 logging.basicConfig(level=logging.INFO)
 
 
 class S3Storage:
-    def __init__(self, client, bucket):
+    def __init__(self, client: BaseClient, bucket: str):
         self.client = client
         self.bucket = bucket
 
-    def load_from_s3(self, key):
+    def load_from_s3(self, key: str):
         try:
             response = self.client.get_object(Bucket=self.bucket, Key=key)
             buffer = io.BytesIO(response["Body"].read())
@@ -27,11 +28,13 @@ class S3Storage:
                     f"Bucket {self.bucket} does not exist. Check config."
                 ) from e
             elif error == "NoSuchKey":
-                raise RuntimeError(f"Object with key '{key}' not found in bucket.")
+                raise RuntimeError(
+                    f"Object with key '{key}' not found in bucket."
+                ) from e
             else:
                 raise
 
-    def save_object(self, key, obj):
+    def save_object(self, key: str, obj):
         try:
             buffer = io.BytesIO()
             joblib.dump(obj, buffer)
